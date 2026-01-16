@@ -12,8 +12,6 @@ A production-ready Android library that provides a custom ImageView with pinch-t
 
 - Highly Customizable via XML - Easy configuration without coding
 
-- Programmatic Control - API methods for developers
-
 - Production-Ready Performance - Technical benefits and optimization
 
 - Easy Integration - Developer experience and compatibility
@@ -23,9 +21,8 @@ A production-ready Android library that provides a custom ImageView with pinch-t
 # **Preview**
 ---
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/54e22ab7-86fd-4701-9cef-de2b620beedc"
-       alt="Demo GIF"
-       width="200">
+  <img src="https://github.com/S13reya/Android_Zoom_Gesture_Image_View/blob/stages/app/src/main/assets/demovideo.gif" height="320"/>
+
 
 
 
