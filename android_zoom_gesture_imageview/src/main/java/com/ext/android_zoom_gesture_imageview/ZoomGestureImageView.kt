@@ -1,11 +1,10 @@
 package com.ext.android_zoom_gesture_imageview
 
-
-
 import android.content.Context
 import android.graphics.Matrix
 import android.graphics.PointF
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
@@ -54,6 +53,8 @@ class ZoomGestureImageView @JvmOverloads constructor(
     private var enableZoom = true
     private var enablePan = true
     private var doubleTapToZoom = true
+    private var initialMinScale = 1f
+    private var initialMaxScale = 5f
 
     init {
         scaleType = ScaleType.MATRIX
@@ -65,8 +66,10 @@ class ZoomGestureImageView @JvmOverloads constructor(
             0, 0
         ).apply {
             try {
-                minScale = getFloat(R.styleable.ZoomGestureImageView_minZoom, 1f)
-                maxScale = getFloat(R.styleable.ZoomGestureImageView_maxZoom, 5f)
+                initialMinScale = getFloat(R.styleable.ZoomGestureImageView_minZoom, 1f)
+                initialMaxScale = getFloat(R.styleable.ZoomGestureImageView_maxZoom, 5f)
+                minScale = initialMinScale
+                maxScale = initialMaxScale
                 enableZoom = getBoolean(R.styleable.ZoomGestureImageView_enableZoom, true)
                 enablePan = getBoolean(R.styleable.ZoomGestureImageView_enablePan, true)
                 doubleTapToZoom = getBoolean(R.styleable.ZoomGestureImageView_doubleTapToZoom, true)
@@ -102,26 +105,61 @@ class ZoomGestureImageView @JvmOverloads constructor(
         drawable?.let {
             intrinsicImageWidth = it.intrinsicWidth.toFloat()
             intrinsicImageHeight = it.intrinsicHeight.toFloat()
+            // Reset to fit the new image
+            post {
+                fitImageToView()
+            }
+        }
+    }
+
+    override fun setImageURI(uri: Uri?) {
+        super.setImageURI(uri)
+        drawable?.let {
+            intrinsicImageWidth = it.intrinsicWidth.toFloat()
+            intrinsicImageHeight = it.intrinsicHeight.toFloat()
+            // Reset to fit the new image
+            post {
+                fitImageToView()
+            }
+        }
+    }
+
+    override fun setImageBitmap(bm: android.graphics.Bitmap?) {
+        super.setImageBitmap(bm)
+        bm?.let {
+            intrinsicImageWidth = it.width.toFloat()
+            intrinsicImageHeight = it.height.toFloat()
+            // Reset to fit the new image
+            post {
+                fitImageToView()
+            }
         }
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        val oldWidth = viewWidth
+        val oldHeight = viewHeight
         viewWidth = MeasureSpec.getSize(widthMeasureSpec)
         viewHeight = MeasureSpec.getSize(heightMeasureSpec)
 
-        if (currentScale == 1f) {
-            fitImageToView()
+        // Only fit on first measure or if dimensions changed significantly
+        if (oldWidth == 0 || oldHeight == 0 || currentScale == 1f) {
+            post {
+                fitImageToView()
+            }
         }
     }
 
     private fun fitImageToView() {
         if (intrinsicImageWidth == 0f || intrinsicImageHeight == 0f) return
+        if (viewWidth == 0 || viewHeight == 0) return
 
         val scaleX = viewWidth.toFloat() / intrinsicImageWidth
         val scaleY = viewHeight.toFloat() / intrinsicImageHeight
         val scale = min(scaleX, scaleY)
 
+        matrix.reset()
         matrix.setScale(scale, scale)
 
         // Center the image
@@ -131,6 +169,7 @@ class ZoomGestureImageView @JvmOverloads constructor(
 
         imageMatrix = matrix
         currentScale = scale
+        minScale = scale
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -289,7 +328,9 @@ class ZoomGestureImageView @JvmOverloads constructor(
      * Reset zoom to original size
      */
     fun resetZoom() {
-        fitImageToView()
+        post {
+            fitImageToView()
+        }
     }
 
     /**

@@ -1,8 +1,5 @@
 package com.ext.android_zoom_gesture_image_view
 
-
-
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -26,7 +23,7 @@ class MainActivity : AppCompatActivity() {
     private val imagePickerLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
+        if (result.resultCode == RESULT_OK) {
             result.data?.data?.let { uri ->
                 loadImageFromUri(uri)
             }
@@ -103,7 +100,7 @@ class MainActivity : AppCompatActivity() {
     private fun loadImageFromUri(uri: Uri) {
         try {
             zoomImageView.setImageURI(uri)
-            zoomImageView.resetZoom()
+            // The library now automatically resets zoom when image is loaded
             updateZoomLevel()
             Toast.makeText(this, "Image loaded successfully", Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
