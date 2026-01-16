@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ZoomGestureImageView">
+        <!-- Minimum zoom scale (default: 1.0) -->
+        <attr name="minZoom" format="float" />
+
+        <!-- Maximum zoom scale (default: 5.0) -->
+        <attr name="maxZoom" format="float" />
+
+        <!-- Enable/disable zoom gestures (default: true) -->
+        <attr name="enableZoom" format="boolean" />
+
+        <!-- Enable/disable pan gestures (default: true) -->
+        <attr name="enablePan" format="boolean" />
+
+        <!-- Enable/disable double tap to zoom (default: true) -->
+        <attr name="doubleTapToZoom" format="boolean" />
+    </declare-styleable>
+</resources>
