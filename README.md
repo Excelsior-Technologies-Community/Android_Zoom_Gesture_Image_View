@@ -48,42 +48,23 @@ dependencies {
 ## ⚡ **attrs file**
 
 ```
-
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="SwipeTransitionView">
+    <declare-styleable name="ZoomGestureImageView">
+        <!-- Minimum zoom scale (default: 1.0) -->
+        <attr name="minZoom" format="float" />
 
-        <!-- Swipe direction: horizontal, vertical, or all -->
-        <attr name="swipeDirection" format="enum">
-            <enum name="horizontal" value="0" />
-            <enum name="vertical" value="1" />
-            <enum name="all" value="2" />
-        </attr>
+        <!-- Maximum zoom scale (default: 5.0) -->
+        <attr name="maxZoom" format="float" />
 
-        <!-- Duration of transition animation in milliseconds -->
-        <attr name="transitionDuration" format="integer" />
+        <!-- Enable/disable zoom gestures (default: true) -->
+        <attr name="enableZoom" format="boolean" />
 
-        <!-- Threshold for swipe completion (0.0 to 1.0) -->
-        <attr name="swipeThreshold" format="float" />
+        <!-- Enable/disable pan gestures (default: true) -->
+        <attr name="enablePan" format="boolean" />
 
-        <!-- Enable or disable swipe gesture -->
-        <attr name="enableSwipe" format="boolean" />
-
-        <!-- Overlay color during swipe -->
-        <attr name="overlayColor" format="color" />
-
-        <!-- Show swipe direction indicator -->
-        <attr name="showIndicator" format="boolean" />
-
-        <!-- Color of the swipe indicator -->
-        <attr name="indicatorColor" format="color" />
-
-        <!-- Size of the swipe indicator -->
-        <attr name="indicatorSize" format="dimension" />
-
-        <!-- Elevation/shadow depth during swipe -->
-        <attr name="swipeElevation" format="dimension" />
-
+        <!-- Enable/disable double tap to zoom (default: true) -->
+        <attr name="doubleTapToZoom" format="boolean" />
     </declare-styleable>
 </resources>
 
@@ -94,26 +75,21 @@ dependencies {
 1. Add in XML
 
 ```
-  <com.ext.android_swipe_transition.SwipeTransitionView
-        android:id="@+id/swipeView"
+  <com.ext.android_zoom_gesture_imageview.ZoomGestureImageView
+        android:id="@+id/zoomImageView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="24dp"
-        android:background="#FFFFFF"
-        android:elevation="8dp"
-        app:swipeDirection="all"
-        app:transitionDuration="300"
-        app:swipeThreshold="0.3"
-        app:enableSwipe="true"
-        app:overlayColor="#40000000"
-        app:showIndicator="true"
-        app:indicatorColor="#FFFFFF"
-        app:indicatorSize="70dp"
-        app:swipeElevation="24dp"
-        app:layout_constraintTop_toBottomOf="@id/counterText"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:scaleType="matrix"
+        android:src="@drawable/sample"
+        app:minZoom="1.0"
+        app:maxZoom="10.0"
+        app:enableZoom="true"
+        app:enablePan="true"
+        app:doubleTapToZoom="true"
+        app:layout_constraintBottom_toTopOf="@+id/controlPanel"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 ```
 
